@@ -86,7 +86,7 @@ public class TileButton extends JButton {
   }
 
   public boolean hasNoImage() {
-    return getImage() == null;
+    return getIcon() == null;
   }
 
   public void swap(TileButton otherTile) {
