@@ -21,7 +21,7 @@ public class SlidingTiles extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
-  private static final String FILENAME = "slidingTilesImage.jpg";
+  private static final String FILENAME = "chalmander.jpg";
 
   private static final int UP = 0;
 
@@ -60,15 +60,12 @@ public class SlidingTiles extends JFrame {
   }
 
   private void initGUI() {
-    JLabel titleLabel = new JLabel("Sliding Tiles");
-    add(titleLabel, BorderLayout.PAGE_START);
-
     // main panel
     divideImage();
 
     // button panel
     JPanel buttonPanel = new JPanel();
-    buttonPanel.setBackground(Color.BLACK);
+    buttonPanel.setBackground(Color.BLUE);
     add(buttonPanel, BorderLayout.PAGE_END);
 
     JButton scrambleButton = new JButton("Scramble");
@@ -115,7 +112,7 @@ public class SlidingTiles extends JFrame {
     }
     centerPanel.revalidate();
 
-    scramble();
+    // scramble();
   }
 
   private void scramble() {
