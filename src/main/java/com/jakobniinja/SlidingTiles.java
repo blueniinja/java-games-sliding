@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -31,20 +30,22 @@ public class SlidingTiles extends JFrame {
 
   private static final int RIGHT = 3;
 
-  private int tileSize = 50;
+  private static final int TILE_SIZE = 50;
 
-  private int gridSize = 4;
+  private static final int GRID_SIZE = 4;
 
-  private TileButton[][] tile = new TileButton[gridSize][gridSize];
+  private final TileButton[][] tile = new TileButton[GRID_SIZE][GRID_SIZE];
 
-  private JPanel centerPanel = new JPanel();
+  private final JPanel centerPanel = new JPanel();
 
-  private BufferedImage image = null;
+  private final Random random = new Random();
+
+  private transient BufferedImage image;
 
   public SlidingTiles() {
     try {
       image = ImageIO.read(new File(FILENAME));
-      TileButton.setTileMaxTiles(tileSize, gridSize * gridSize);
+      TileButton.setTileMaxTiles(TILE_SIZE, GRID_SIZE * GRID_SIZE);
       initGUI();
 
       setTitle("Sliding Tiles");
@@ -75,11 +76,11 @@ public class SlidingTiles extends JFrame {
 
   private void newGame() {
     int imageId = 0;
-    for (int row = 0; row < gridSize; row++) {
-      for (int col = 0; col < gridSize; col++) {
-        int x = col * tileSize;
-        int y = row * tileSize;
-        BufferedImage subimage = image.getSubimage(x, y, tileSize, tileSize);
+    for (int row = 0; row < GRID_SIZE; row++) {
+      for (int col = 0; col < GRID_SIZE; col++) {
+        int x = col * TILE_SIZE;
+        int y = row * TILE_SIZE;
+        BufferedImage subimage = image.getSubimage(x, y, TILE_SIZE, TILE_SIZE);
         ImageIcon imageIcon = new ImageIcon(subimage);
         tile[row][col].setImage(imageIcon, imageId);
         imageId++;
@@ -89,16 +90,16 @@ public class SlidingTiles extends JFrame {
   }
 
   private void divideImage() {
-    centerPanel.setLayout(new GridLayout(gridSize, gridSize));
+    centerPanel.setLayout(new GridLayout(GRID_SIZE, GRID_SIZE));
     add(centerPanel, BorderLayout.CENTER);
 
     int imageId = 0;
-    for (int row = 0; row < gridSize; row++) {
-      for (int col = 0; col < gridSize; col++) {
-        int x = col * tileSize;
-        int y = row * tileSize;
+    for (int row = 0; row < GRID_SIZE; row++) {
+      for (int col = 0; col < GRID_SIZE; col++) {
+        int x = col * TILE_SIZE;
+        int y = row * TILE_SIZE;
 
-        BufferedImage subImage = image.getSubimage(x, y, tileSize, tileSize);
+        BufferedImage subImage = image.getSubimage(x, y, TILE_SIZE, TILE_SIZE);
         ImageIcon imageIcon = new ImageIcon(subImage);
         tile[row][col] = new TileButton(imageIcon, imageId, row, col);
         tile[row][col].addActionListener(e -> {
@@ -116,13 +117,11 @@ public class SlidingTiles extends JFrame {
   }
 
   private void scramble() {
-    int openRow = gridSize - 1;
-    int openCol = gridSize - 1;
+    int openRow = GRID_SIZE - 1;
+    int openCol = GRID_SIZE - 1;
 
-    Random random = new Random();
-
-    for (int i = 0; i < 25 * gridSize; i++) {
-      int direction = random.nextInt(gridSize);
+    for (int i = 0; i < 25 * GRID_SIZE; i++) {
+      int direction = random.nextInt(GRID_SIZE);
       switch (direction) {
         case UP:
           if (openRow > 0) {
@@ -132,7 +131,7 @@ public class SlidingTiles extends JFrame {
           break;
 
         case DOWN:
-          if (openRow < gridSize - 1) {
+          if (openRow < GRID_SIZE - 1) {
             tile[openRow][openCol].swap(tile[openRow + 1][openCol]);
             openRow++;
           }
@@ -145,7 +144,7 @@ public class SlidingTiles extends JFrame {
           break;
 
         case RIGHT:
-          if (openCol < gridSize - 1) {
+          if (openCol < GRID_SIZE - 1) {
             tile[openRow][openCol].swap(tile[openRow][openCol + 1]);
             openCol++;
           }
@@ -160,24 +159,24 @@ public class SlidingTiles extends JFrame {
 
     if (row > 0 && tile[row - 1][col].hasNoImage()) {
       clickedTile.swap(tile[row - 1][col]);
-    } else if (row < gridSize - 1 && tile[row + 1][col].hasNoImage()) {
+    } else if (row < GRID_SIZE - 1 && tile[row + 1][col].hasNoImage()) {
       clickedTile.swap(tile[row + 1][col]);
     } else if (col > 0 && tile[row][col - 1].hasNoImage()) {
       clickedTile.swap(tile[row][col - 1]);
-    } else if (col < gridSize - 1 && tile[row][col + 1].hasNoImage()) {
+    } else if (col < GRID_SIZE - 1 && tile[row][col + 1].hasNoImage()) {
       clickedTile.swap(tile[row][col + 1]);
     }
 
     if (imageInOrder()) {
-      tile[gridSize - 1][gridSize - 1].showImage();
+      tile[GRID_SIZE - 1][GRID_SIZE - 1].showImage();
     }
   }
 
   public boolean imageInOrder() {
     int id = 0;
     boolean inOrder = true;
-    for (int row = 0; row < gridSize && inOrder; row++) {
-      for (int col = 0; col < gridSize && inOrder; col++) {
+    for (int row = 0; row < GRID_SIZE && inOrder; row++) {
+      for (int col = 0; col < GRID_SIZE && inOrder; col++) {
         int currentId = tile[row][col].getImageId();
         if (currentId != id) {
           inOrder = false;

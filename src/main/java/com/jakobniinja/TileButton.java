@@ -15,11 +15,11 @@ public class TileButton extends JButton {
 
   private ImageIcon imageIcon;
 
-  private int imageId = 0;
+  private int imageId;
 
-  private int row = 0;
+  private final int row;
 
-  private int col = 0;
+  private final int col;
 
   public void setImage(ImageIcon imageIcon, int imageId) {
     this.imageId = imageId;
@@ -56,28 +56,8 @@ public class TileButton extends JButton {
     return col;
   }
 
-  public static void setTileSize(int tileSize) {
-    TileButton.tileSize = tileSize;
-  }
-
-  public static void setMaxTiles(int maxTiles) {
-    TileButton.maxTiles = maxTiles;
-  }
-
   public void setImage(ImageIcon imageIcon) {
     this.imageIcon = imageIcon;
-  }
-
-  public void setImageId(int imageId) {
-    this.imageId = imageId;
-  }
-
-  public void setRow(int row) {
-    this.row = row;
-  }
-
-  public void setCol(int col) {
-    this.col = col;
   }
 
   public static void setTileMaxTiles(int size, int max) {
